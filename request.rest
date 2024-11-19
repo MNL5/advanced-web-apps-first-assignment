@@ -1,0 +1,55 @@
+### Add new post
+
+POST http://localhost:3000/posts content-type: application/json
+
+{
+    "title": "Justice League", "sender": "Batman", "content": "We are searching for new recruits to Justice League."
+}
+
+### Title is required and is not sent to add new post
+
+POST http://localhost:3000/posts content-type: application/json
+
+{
+    "sender": "Batman", "content": "We are searching for new recruits to Justice League."
+}
+
+### Sender is required and is not sent to add new post
+
+POST http://localhost:3000/posts content-type: application/json
+
+{
+    "title": "Justice League", "content": "We are searching for new recruits to Justice League."
+}
+
+### Title is required and sent as an empty string to add new post
+
+POST http://localhost:3000/posts content-type: application/json
+
+{
+    "title": "", "sender": "Batman", "content": "We are searching for new recruits to Justice League."
+}
+
+### Sender is required and sent as an empty string to add new post
+
+POST http://localhost:3000/posts content-type: application/json
+
+{
+    "title": "Justice League", "sender": "", "content": "We are searching for new recruits to Justice League."
+}
+
+### Content is not required and sent without to add new post
+
+POST http://localhost:3000/posts content-type: application/json
+
+{
+    "title": "Justice League", "sender": "Batman"
+}
+
+### Get all posts
+
+GET http://localhost:3000/posts
+
+### Get posts by sender
+
+GET http://localhost:3000/posts?sender=Batman

@@ -1,4 +1,4 @@
-import PostModel from "../models/postsModel";
+import PostModel from "../models/postsModel.js";
 
 const getAllPosts = async (req, res) => {
   const sender = req.query.sender;
@@ -13,6 +13,19 @@ const getAllPosts = async (req, res) => {
   }
 };
 
-export default {
+const createPost = async (req, res) => {
+  const postBody = req.body;
+
+  try {
+    const post = await PostModel.create(postBody);
+
+    res.status(201).send(post);
+  } catch (error) {
+    res.status(400).send(error.message);
+  }
+};
+
+export {
   getAllPosts,
+  createPost
 };
