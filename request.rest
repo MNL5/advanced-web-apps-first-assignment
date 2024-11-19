@@ -1,3 +1,11 @@
+### Get Post by Id That doesn't exist
+
+GET http://localhost:3000/posts/673c88b56b1c980fce4558b1
+
+### Get Post by Id That exist
+
+GET http://localhost:3000/posts/673c88b56b1c980fce4558b0 
+
 ### Add new post
 
 POST http://localhost:3000/posts content-type: application/json
