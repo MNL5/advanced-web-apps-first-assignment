@@ -25,7 +25,23 @@ const createPost = async (req, res) => {
   }
 };
 
-export {
-  getAllPosts,
-  createPost
+const getPostById = async (req, res) => {
+  const postId = req.params.id;
+
+  if (!postId) {
+    res.status(400).send("Post Id is missing");
+  }
+
+  try {
+    const post = await PostModel.findById(postId);
+    if (post) {
+      res.send(post);
+    } else {
+      res.status(404).send("Post not found");
+    }
+  } catch (error) {
+    res.status(500).send(error.message);
+  }
 };
+
+export { getAllPosts, createPost, getPostById };
