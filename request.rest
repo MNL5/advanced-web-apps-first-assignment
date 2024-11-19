@@ -1,3 +1,25 @@
+### Get Comment By Post ID
+
+GET http://localhost:3000/comments/?postId=673c88b56b1c980fce4558b0
+
+### Get Comment By ID (Does not exist)
+
+GET http://localhost:3000/comments/673ca4bcfb3be23fb7217851
+
+### Get Comment By ID
+
+GET http://localhost:3000/comments/673ca4bcfb3be23fb7217852
+
+### Create Comment
+
+POST http://localhost:3000/comments content-type: application/json
+
+{
+	"postId": "673c88b56b1c980fce4558b0",
+	"sender": "Batman",
+	"content": "We are searching for new recruits to Justice League."
+}
+
 ### Update post: missing updated post
 
 PUT http://localhost:3000/posts/673c88b56b1c980fce4558b0 content-type: application/json
