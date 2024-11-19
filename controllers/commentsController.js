@@ -31,11 +31,18 @@ const getCommentById = async (req, res) => {
 };
 
 const getAllComments = async (req, res) => {
-  const postId = req.query.postId;
+  const { postId, sender } = req.query;
 
   try {
     const filter = {};
-    if (postId) filter.postId = postId;
+
+    if (postId) {
+      filter.postId = postId;
+    }
+
+    if (sender) {
+      filter.sender = sender;
+    }
 
     const comments = await CommentModel.find(filter);
     res.send(comments);
@@ -54,10 +61,7 @@ const updateComment = async (req, res) => {
   }
 
   try {
-    const comment = await CommentModel.findByIdAndUpdate(
-      commentId,
-      comment
-    );
+    const comment = await CommentModel.findByIdAndUpdate(commentId, comment);
 
     if (comment) {
       res.status(200).send(comment);

@@ -18,6 +18,10 @@ PUT http://localhost:3000/posts/673ca4bcfb3be23fb7217852 content-type: applicati
 
 DELETE http://localhost:3000/comments/673ca4bcfb3be23fb7217852
 
+### Get Comment By sender
+
+GET http://localhost:3000/comments/?sender=Batman
+
 ### Get Comment By Post ID
 
 GET http://localhost:3000/comments/?postId=673c88b56b1c980fce4558b0
