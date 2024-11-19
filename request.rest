@@ -1,3 +1,23 @@
+### Update comment's sender
+
+PUT http://localhost:3000/comments/673ca4bcfb3be23fb7217852 content-type: application/json
+
+{
+"sender": "Robin"
+}
+
+### Update comment's content
+
+PUT http://localhost:3000/posts/673ca4bcfb3be23fb7217852 content-type: application/json
+
+{
+"content": "Marvel is better then DC"
+}
+
+### Delete Comment By ID
+
+DELETE http://localhost:3000/comments/673ca4bcfb3be23fb7217852
+
 ### Get Comment By Post ID
 
 GET http://localhost:3000/comments/?postId=673c88b56b1c980fce4558b0
@@ -40,7 +60,7 @@ PUT http://localhost:3000/posts/673c88b56b1c980fce4558b0 content-type: applicati
 "title": "Justice League Assemble"
 }
 
-### Update post's constet
+### Update post's content
 
 PUT http://localhost:3000/posts/673c88b56b1c980fce4558b0 content-type: application/json
 
