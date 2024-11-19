@@ -1,3 +1,39 @@
+### Update post: missing updated post
+
+PUT http://localhost:3000/posts/673c88b56b1c980fce4558b0 content-type: application/json
+
+### Update post missing Id
+
+PUT http://localhost:3000/posts/ content-type: application/json
+
+{
+"title": "Justice League Assemble"
+}
+
+### Update post's title
+
+PUT http://localhost:3000/posts/673c88b56b1c980fce4558b0 content-type: application/json
+
+{
+"title": "Justice League Assemble"
+}
+
+### Update post's constet
+
+PUT http://localhost:3000/posts/673c88b56b1c980fce4558b0 content-type: application/json
+
+{
+"content": "We are searching for new recruits to Justice League, Superpowers are must."
+}
+
+### Post id does not exist
+
+PUT http://localhost:3000/posts/6737231dc4d25584d014a6a1 content-type: application/json
+
+{
+"content": "Welcome back to me weekly podcast"
+}
+
 ### Get Post by Id That doesn't exist
 
 GET http://localhost:3000/posts/673c88b56b1c980fce4558b1
