@@ -53,15 +53,15 @@ const getAllComments = async (req, res) => {
 
 const updateComment = async (req, res) => {
   const commentId = req.params.id;
-  const comment = req.body;
+  const commentData = req.body;
 
-  if (!commentId || !comment) {
+  if (!commentId || !commentData) {
     res.status(400).send("Request required comment Id and updated comment");
     return;
   }
 
   try {
-    const comment = await CommentModel.findByIdAndUpdate(commentId, comment);
+    const comment = await CommentModel.findByIdAndUpdate(commentId, commentData);
 
     if (comment) {
       res.status(200).send(comment);
