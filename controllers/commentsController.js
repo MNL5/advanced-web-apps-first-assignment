@@ -15,6 +15,7 @@ const getCommentById = async (req, res) => {
 
   if (!commentId) {
     res.status(400).send("Comment Id is missing");
+    return;
   }
 
   try {
@@ -45,16 +46,17 @@ const getAllComments = async (req, res) => {
 
 const updateComment = async (req, res) => {
   const commentId = req.params.id;
-  const commentBody = req.body;
+  const comment = req.body;
 
-  if (!commentId || !commentBody) {
+  if (!commentId || !comment) {
     res.status(400).send("Request required comment Id and updated comment");
+    return;
   }
 
   try {
     const comment = await CommentModel.findByIdAndUpdate(
       commentId,
-      commentBody
+      comment
     );
 
     if (comment) {

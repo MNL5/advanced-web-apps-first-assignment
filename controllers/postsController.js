@@ -30,6 +30,7 @@ const getPostById = async (req, res) => {
 
   if (!postId) {
     res.status(400).send("Post Id is missing");
+    return;
   }
 
   try {
@@ -50,6 +51,7 @@ const updatePost = async (req, res) => {
 
   if (!postId || !postBody) {
     res.status(400).send("Request required post Id and updated Post")
+    return;
   }
 
   try {
