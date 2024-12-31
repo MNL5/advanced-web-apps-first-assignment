@@ -1,13 +1,17 @@
 import PostModel from "../models/postsModel.js";
 
+const updateFields = ["content", "title"];
+const filterFields = ["sender"];
+
 const getAllPosts = async (req, res) => {
   const sender = req.query.sender;
 
   try {
     const filter = {};
-    if (sender) filter.sender = sender;
-    const posts = await PostModel.find(filter);
-    res.send(posts);
+    for (const field of filterFields) {
+      if (req.query[field]) filter[field] = req.query[field];
+    }
+    res.send(await PostModel.find(filter));
   } catch (error) {
     res.status(400).send(error.message);
   }
@@ -47,9 +51,12 @@ const getPostById = async (req, res) => {
 
 const updatePost = async (req, res) => {
   const postId = req.params.id;
-  const postBody = req.body;
+  const postBody = {};
+    for (const field of updateFields) {
+      if (req.body[field]) postBody[field] = req.body[field];
+    }
 
-  if (!postId || !postBody) {
+  if (!postId || Object.keys(postBody).length == 0) {
     res.status(400).send("Request required post Id and updated Post")
     return;
   }
