@@ -1,5 +1,8 @@
 import CommentModel from "../models/commentsModel.js";
 
+const updateFields = ["content"];
+const filterFields = ["postId", "sender"];
+
 const createComment = async (req, res) => {
   try {
     const comment = await CommentModel.create(req.body);
@@ -31,21 +34,13 @@ const getCommentById = async (req, res) => {
 };
 
 const getAllComments = async (req, res) => {
-  const { postId, sender } = req.query;
-
   try {
     const filter = {};
-
-    if (postId) {
-      filter.postId = postId;
+    for (const field of filterFields) {
+      if (req.query[field]) filter[field] = req.query[field];
     }
 
-    if (sender) {
-      filter.sender = sender;
-    }
-
-    const comments = await CommentModel.find(filter);
-    res.send(comments);
+    res.send(await CommentModel.find(filter));
   } catch (error) {
     res.status(400).send(error.message);
   }
@@ -53,15 +48,21 @@ const getAllComments = async (req, res) => {
 
 const updateComment = async (req, res) => {
   const commentId = req.params.id;
-  const commentData = req.body;
+  const commentData = {};
+    for (const field of updateFields) {
+      if (req.body[field]) commentData[field] = req.body[field];
+    }
 
-  if (!commentId || !commentData) {
+  if (!commentId || Object.keys(commentData).length == 0) {
     res.status(400).send("Request required comment Id and updated comment");
     return;
   }
 
   try {
-    const comment = await CommentModel.findByIdAndUpdate(commentId, commentData);
+    const comment = await CommentModel.findByIdAndUpdate(
+      commentId,
+      commentData
+    );
 
     if (comment) {
       res.status(200).send(comment);
