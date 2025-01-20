@@ -16,7 +16,7 @@ const db = mongoose.connection;
 db.on("error", (error) => console.error(error));
 db.once("open", () => console.log("Connected to database"));
 
-const initApp = () => {
+const appStart = () => {
   return new Promise<Express>((resolve, reject) => {
     if (!process.env.DB_CONNECT) {
       reject("DB_CONNECT is not defined in .env file");
@@ -33,4 +33,4 @@ const initApp = () => {
   });
 };
 
-export default initApp;
+export default appStart;
