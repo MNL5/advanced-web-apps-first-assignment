@@ -5,14 +5,20 @@ import mongoose from "mongoose";
 import commentsRoute from "./routes/commentRoutes";
 import postsRoute from "./routes/postRoutes";
 import usersRoute from "./routes/userRoutes";
-dotenv.config();
+import authRoutes from "./routes/authRoutes";
 
+if (process.env.NODE_ENV == "test") {
+  dotenv.config({ path: ".env.test" });
+} else {
+  dotenv.config();
+}
 const app = express();
 app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({ extended: true }));
+app.use("/auth", authRoutes);
+app.use("/users", usersRoute);
 app.use("/posts", postsRoute);
 app.use("/comments", commentsRoute);
-app.use("/users", usersRoute);
 
 const db = mongoose.connection;
 db.on("error", (error) => console.error(error));

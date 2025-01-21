@@ -1,7 +1,10 @@
 import { Router } from "express";
 import commentsController from "../controllers/commentsController";
+import { authMiddleware } from "../controllers/usersController";
 
 const router = Router();
+
+router.use(authMiddleware);
 
 router.get("/", commentsController.getAll);
 
