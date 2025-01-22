@@ -2,7 +2,6 @@ import commentsModel, { IComments } from "../models/commentsModel";
 import { Request, Response } from "express";
 import BaseController from "./baseController";
 import postModel from "../models/postsModel";
-import userModel from "../models/usersModel";
 
 class CommentsController extends BaseController<IComments> {
   constructor() {
@@ -18,12 +17,7 @@ class CommentsController extends BaseController<IComments> {
         }
       }
 
-      if (req.body.sender) {
-        if (!(await userModel.findById(req.body.sender))) {
-          res.status(400).send("Sender not found");
-          return;
-        }
-      }
+      req.body.sender = res.locals.userId;
 
       await super.create(req, res);
     } catch (error) {

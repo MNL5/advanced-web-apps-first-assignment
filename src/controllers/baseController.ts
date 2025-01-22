@@ -52,7 +52,10 @@ class BaseController<T> {
     try {
       const item = await this.model.create(body);
       res.status(201).send(item);
-    } catch (error) {
+    } catch (error: any) {
+      if (error.code === 11000) {
+        error = { message: "Duplicate Key" };
+      }
       res.status(400).send(error);
     }
   }
@@ -95,6 +98,9 @@ class BaseController<T> {
         res.status(404).send("not found");
       }
     } catch (error: any) {
+      if (error.code === 11000) {
+        error = { message: "Duplicate Key" };
+      }
       res.status(400).send(error);
     }
   }
