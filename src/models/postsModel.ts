@@ -1,13 +1,20 @@
 import mongoose from "mongoose";
+import IEntity from "./entity";
 
-export interface IPost {
-  title: string;
+export interface IPost extends IEntity {
+  userId: string;
+  breed: string;
   content: string;
-  sender: string;
+  imageURL: string;
+  likeBy: string[];
 }
 
 const postSchema = new mongoose.Schema<IPost>({
-  title: {
+  userId: {
+    type: String,
+    required: true,
+  },
+  breed: {
     type: String,
     required: true,
   },
@@ -15,8 +22,16 @@ const postSchema = new mongoose.Schema<IPost>({
     type: String,
     required: true,
   },
-  sender: {
+  imageURL: {
     type: String,
+    required: false,
+  },
+  likeBy: {
+    type: [String],
+    default: [],
+  },
+  lastUpdated: {
+    type: Date,
     required: true,
   },
 });

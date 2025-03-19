@@ -26,7 +26,7 @@ class CommentsController extends BaseController<IComments> {
   }
 
   getFilterFields() {
-    return ["sender", "postId"];
+    return ["userId", "postId"];
   }
 
   getUpdateFields() {

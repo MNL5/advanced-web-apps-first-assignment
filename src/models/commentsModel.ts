@@ -1,8 +1,9 @@
 import mongoose from "mongoose";
+import IEntity from "./entity";
 
-export interface IComments {
+export interface IComments extends IEntity {
   content: string;
-  sender: string;
+  userId: string;
   postId: string;
 }
 const commentsSchema = new mongoose.Schema<IComments>({
@@ -10,12 +11,16 @@ const commentsSchema = new mongoose.Schema<IComments>({
     type: String,
     required: true,
   },
-  sender: {
+  userId: {
     type: String,
     required: true,
   },
   postId: {
     type: String,
+    required: true,
+  },
+  timestamp: {
+    type: Date,
     required: true,
   },
 });
