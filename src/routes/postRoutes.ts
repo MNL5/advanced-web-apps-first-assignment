@@ -18,28 +18,38 @@ router.use(authMiddleware);
  *     Post:
  *       type: object
  *       required:
- *         - title
+ *         - breed
  *         - content
  *         - _id
- *         - sender
+ *         - userId
+ *         - imageURL
+ *         - likeBy
  *       properties:
  *         _id:
  *           type: string
  *           description: The auto-generated id of the post
- *         title:
+ *         breed:
  *           type: string
- *           description: The title of the post
+ *           description: The animal breed the post is about
  *         content:
  *           type: string
  *           description: The content of the post
- *         sender:
+ *         userId:
  *           type: string
- *           description: The sender id of the post
+ *           description: The user id of the post
+ *         imageURL:
+ *           type: string
+ *           description: The route to pull from the image of the post
+ *         likeBy:
+ *           type: string[]
+ *           description: Array with all the users who liked the post
  *       example:
  *         _id: 245ggofwk44234r234r23f4
- *         title: My First Post
- *         content: Batman is more then Superman by far.
- *         sender: 245ggofwk44234r234r23g2
+ *         breed: Golden Retriver
+ *         content: My dog max is looking for new home.
+ *         userId: 245ggofwk44234r234r23g2
+ *         imageURL: http://180.180.170.170/files/2343435fewsc
+ *         likeBy: []
  */
 /**
  * @swagger
@@ -53,11 +63,11 @@ router.use(authMiddleware);
  *       - authorization: []
  *     parameters:
  *       - in: query
- *         name: sender
+ *         name: userId
  *         schema:
  *           type: string
  *         required: false
- *         description: The sender ID to filter by the posts
+ *         description: The user ID to filter by the posts
  *     responses:
  *       200:
  *         description: A list of posts
@@ -71,6 +81,39 @@ router.use(authMiddleware);
  *         description: Server error
  */
 router.get("/", postsController.getAll);
+
+/**
+ * @swagger
+ * /posts:
+ *   put:
+ *     summary: Like or unlike a post based on the UserID
+ *     description: Like or unlike a post based on the UserID
+ *     tags:
+ *       - Posts
+ *     security:
+ *       - authorization: []
+ *     parameters:
+ *       - in: path
+ *         name: id
+ *         schema:
+ *           type: string
+ *         required: true
+ *         description: The ID of the post
+ *     requestBody:
+ *       required: false
+ *     responses:
+ *       200:
+ *         description: The post after the like
+ *         content:
+ *           application/json:
+ *             schema:
+ *               $ref: '#/components/schemas/Post'
+ *       400:
+ *         description: Invalid input
+ *       500:
+ *         description: Server error
+ */
+router.put("/like/:id", postsController.like);
 
 /**
  * @swagger
@@ -120,7 +163,7 @@ router.get("/:id", postsController.getById);
  *           schema:
  *             type: object
  *             properties:
- *               title:
+ *               breed:
  *                 type: string
  *                 description: The title of the post
  *               content:
@@ -167,9 +210,9 @@ router.post("/", postsController.create);
  *           schema:
  *             type: object
  *             properties:
- *               title:
+ *               breed:
  *                 type: string
- *                 description: The title of the post
+ *                 description: The breed of the post
  *               content:
  *                 type: string
  *                 description: The content of the post

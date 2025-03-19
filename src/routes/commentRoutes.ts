@@ -22,7 +22,7 @@ router.use(authMiddleware);
  *         - content
  *         - _id
  *         - postId
- *         - sender
+ *         - userId
  *       properties:
  *         _id:
  *           type: string
@@ -33,14 +33,14 @@ router.use(authMiddleware);
  *         postId:
  *           type: string
  *           description: The id of the related post of the comment
- *         sender:
+ *         userId:
  *           type: string
- *           description: The sender id of the comment
+ *           description: The user id of the comment
  *       example:
  *         _id: 231266t90731aj883d33g4
  *         content: comment Comment comment
  *         postId: 31aj883d33g4
- *         sender: 231266t90712
+ *         userId: 231266t90712
  */
 /**
  * @swagger

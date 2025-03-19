@@ -21,7 +21,7 @@ const commentsSchema = new mongoose.Schema<IComments>({
   },
   timestamp: {
     type: Date,
-    required: true,
+    default: () => new Date(),
   },
 });
 

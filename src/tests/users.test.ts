@@ -19,7 +19,7 @@ beforeAll(async () => {
   const token = res.body.accessToken;
   expect(token).toBeDefined();
 
-  request = supertest.agent(app).set({ authorization: `JWT ${token}` });
+  request = supertest.agent(app).set({ authorization: `${token}` });
 });
 
 afterAll((done) => {

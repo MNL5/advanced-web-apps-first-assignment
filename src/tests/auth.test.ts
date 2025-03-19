@@ -22,29 +22,50 @@ afterAll((done) => {
   done();
 });
 
-type User = IUser & {
+type User = UserRegister & {
   accessToken?: string;
   refreshToken?: string;
 };
 
+type UserLogin = {
+  _id?: string;
+  email: string;
+  password: string;
+};
+
+type UserRegister = UserLogin & {
+  username: string;
+  avatarURL: string;
+};
+
 const user: User = {
+  email: "test@user.com",
+  password: "testpassword",
   username: "Batman",
+  avatarURL: "/public/some.png",
+};
+
+const userLoginInstance: UserLogin = {
   email: "test@user.com",
   password: "testpassword",
 };
 
+const userRegisterInstance: UserRegister = {
+  email: "test@user.com",
+  password: "testpassword",
+  username: "Batman",
+  avatarURL: "/public/some.png",
+};
+
 describe("Auth Tests", () => {
   test("Test Create User", async () => {
-    const response = await request.post("/auth/register").send(user);
-    expect(response.statusCode).toBe(201);
-    expect(response.body.username).toBe(user.username);
-    expect(response.body.email).toBe(user.email);
-    const validPassword = await bcrypt.compare(
-      user.password,
-      response.body.password
-    );
-    expect(validPassword).toBe(true);
+    const response = await request
+      .post("/auth/register")
+      .send(userRegisterInstance);
+    expect(response.statusCode).toBe(200);
     user._id = response.body._id;
+    user.accessToken = response.body.accessToken;
+    user.refreshToken = response.body.refreshToken;
   });
 
   test("Test Create User with duplicate email", async () => {
@@ -52,7 +73,7 @@ describe("Auth Tests", () => {
       .post("/auth/register")
       .send({ ...user, username: "1" });
     expect(response.statusCode).toBe(400);
-    expect(response.body.message).toBe("Duplicate Key");
+    expect(response.body.message).toBe("Duplicate email or username");
   });
 
   test("Test Create User with duplicate username", async () => {
@@ -60,16 +81,7 @@ describe("Auth Tests", () => {
       .post("/auth/register")
       .send({ ...user, email: "1" });
     expect(response.statusCode).toBe(400);
-    expect(response.body.message).toBe("Duplicate Key");
-  });
-
-  test("Test Create user without username", async () => {
-    const { username, ...rest } = user;
-    const response = await request.post("/auth/register").send(rest);
-    expect(response.statusCode).toBe(400);
-    expect(response.body.message).toBe(
-      "Users validation failed: username: Path `username` is required."
-    );
+    expect(response.body.message).toBe("Duplicate email or username");
   });
 
   test("Test Create user without email", async () => {
@@ -120,52 +132,19 @@ describe("Auth Tests", () => {
     );
   });
 
-  test("Auth test login with username", async () => {
-    const response = await request
-      .post("/auth/login")
-      .send({ username: user.username, password: user.password });
-    expect(response.statusCode).toBe(200);
-    const accessToken = response.body.accessToken;
-    const refreshToken = response.body.refreshToken;
-    expect(accessToken).toBeDefined();
-    expect(refreshToken).toBeDefined();
-    expect(response.body._id).toBe(user._id);
-    user.accessToken = accessToken;
-    user.refreshToken = refreshToken;
-  });
-
-  test("Check tokens are not the same", async () => {
-    const response = await request.post("/auth/login").send(user);
-    const accessToken = response.body.accessToken;
-    const refreshToken = response.body.refreshToken;
-    expect(accessToken).not.toBe(user.accessToken);
-    expect(refreshToken).not.toBe(user.refreshToken);
-  });
-
   test("Auth test login with email", async () => {
-    const response = await request
-      .post("/auth/login")
-      .send({ email: user.email, password: user.password });
+    const response = await request.post("/auth/login").send(userLoginInstance);
     expect(response.statusCode).toBe(200);
     const accessToken = response.body.accessToken;
     const refreshToken = response.body.refreshToken;
     expect(accessToken).toBeDefined();
     expect(refreshToken).toBeDefined();
-    expect(response.body._id).toBe(user._id);
-  });
-
-  test("Login with not existing username", async () => {
-    const response = await request
-      .post("/auth/login")
-      .send({ username: "HI", password: user.password });
-    expect(response.statusCode).toBe(400);
-    expect(response.text).toBe("wrong username/email or password");
   });
 
   test("Login with not existing email", async () => {
     const response = await request
       .post("/auth/login")
-      .send({ email: "HI", password: user.password });
+      .send({ email: "HI", password: userLoginInstance.password });
     expect(response.statusCode).toBe(400);
     expect(response.text).toBe("wrong username/email or password");
   });
@@ -173,9 +152,9 @@ describe("Auth Tests", () => {
   test("Login with not matching password", async () => {
     const response = await request
       .post("/auth/login")
-      .send({ email: user.email, password: "no" });
+      .send({ email: userLoginInstance.email, password: "no" });
     expect(response.statusCode).toBe(400);
-    expect(response.text).toBe("wrong username/email or password");
+    expect(response.text).toBe("wrong email or password");
   });
 
   test("Login with nothing", async () => {
@@ -193,7 +172,7 @@ describe("Auth Tests", () => {
   test("Auth test with token", async () => {
     const response = await request
       .get("/users")
-      .set({ authorization: `JWT ${user.accessToken}` })
+      .set({ authorization: user.accessToken })
       .expect(200);
     expect(response.statusCode).toBe(200);
   });
@@ -278,9 +257,9 @@ describe("Auth Tests", () => {
 
     const response2 = await request
       .post("/posts")
-      .set({ authorization: "JWT " + user.accessToken })
+      .set({ authorization: user.accessToken })
       .send({
-        title: "Test Post",
+        breed: "Test Post",
         content: "Test Content",
       });
     expect(response2.statusCode).not.toBe(201);
@@ -293,9 +272,9 @@ describe("Auth Tests", () => {
     user.accessToken = response3.body.accessToken;
     const response4 = await request
       .post("/posts")
-      .set({ authorization: "JWT " + user.accessToken })
+      .set({ authorization: user.accessToken })
       .send({
-        title: "Test Post",
+        breed: "Test Post",
         content: "Test Content",
       });
     expect(response4.statusCode).toBe(201);

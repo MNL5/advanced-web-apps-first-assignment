@@ -17,7 +17,7 @@ class CommentsController extends BaseController<IComments> {
         }
       }
 
-      req.body.sender = res.locals.userId;
+      req.body.userId = res.locals.userId;
 
       await super.create(req, res);
     } catch (error) {

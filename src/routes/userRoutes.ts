@@ -21,6 +21,7 @@ router.use(authMiddleware);
  *         - username
  *         - email
  *         - password
+ *         - avatarURL
  *       properties:
  *         _id:
  *           type: string
@@ -34,11 +35,15 @@ router.use(authMiddleware);
  *         password:
  *           type: string
  *           description: The encrypted password of the user
+ *         avatarURL:
+ *           type: string
+ *           description: The url user picture
  *       example:
  *         _id: 245ggofwk44234r234r23f4
  *         username: Batman
  *         email: Batman@gmail.com
  *         password: 245ggofwk44234r234r23by
+ *         avatarURL: http://190.180.170.160/files/adakdajda3232
  */
 /**
  * @swagger

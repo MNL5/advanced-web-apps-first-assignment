@@ -1,8 +1,9 @@
-import { Request, Response } from "express";
+import { query, Request, Response } from "express";
 import { Model, RootFilterQuery, UpdateQuery } from "mongoose";
+import IEntity from "../models/entity";
 
-class BaseController<T> {
-  model: Model<T>;
+class BaseController<T extends IEntity> {
+  protected model: Model<T>;
 
   constructor(model: any) {
     this.model = model;
@@ -21,7 +22,9 @@ class BaseController<T> {
         if (req.query[field]) filter[field] = req.query[field];
       }
 
-      const items = await this.model.find(filter as RootFilterQuery<T>);
+      const items = await this.model
+        .find(filter as RootFilterQuery<T>)
+        .sort({ timestamp: -1 });
       res.send(items);
     } catch (error: any) {
       res.status(400).send(error);
@@ -81,6 +84,7 @@ class BaseController<T> {
       if (req.body[field]) updateBody[field] = req.body[field];
     }
 
+    updateBody["timestamp"] = new Date();
     try {
       const filter = { _id: id };
 

@@ -5,7 +5,7 @@ export interface IUser extends IEntity {
   username: string;
   email: string;
   password: string;
-  avaterURL: string;
+  avatarURL: string;
   refreshToken?: string[];
 }
 
@@ -24,11 +24,11 @@ const userSchema = new mongoose.Schema<IUser>({
     type: String,
     required: true,
   },
-  avaterURL: {
+  avatarURL: {
     type: String,
     required: false,
   },
-  lastUpdate: {
+  timestamp: {
     type: Date,
     required: false,
   },

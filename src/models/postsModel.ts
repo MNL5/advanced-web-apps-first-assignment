@@ -14,11 +14,11 @@ const postSchema = new mongoose.Schema<IPost>({
     type: String,
     required: true,
   },
-  breed: {
+  content: {
     type: String,
     required: true,
   },
-  content: {
+  breed: {
     type: String,
     required: true,
   },
@@ -30,9 +30,9 @@ const postSchema = new mongoose.Schema<IPost>({
     type: [String],
     default: [],
   },
-  lastUpdated: {
+  timestamp: {
     type: Date,
-    required: true,
+    default: () => new Date(),
   },
 });
 
